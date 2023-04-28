@@ -20,9 +20,9 @@ namespace Glue
         }
         public string[] GetItems(char delimiter)
         {
-            return Content.Split(delimiter);
+            return this.Content.Split(delimiter);
         }
-        public int[] GetWidths(char delimiter)
+        public int[] Widths(char delimiter)
         {
             List<string> items = GetItems(delimiter).ToList<string>();
             int[] widths = new int[items.Count()];
@@ -32,7 +32,11 @@ namespace Glue
             }
             return widths;
         }
-        public string GetMerged(char delimiter, string separator)
+        public int LineCount(char delimiter)
+        {
+            return this.Content.Split(delimiter).Count();
+        }
+        public string Merged(char delimiter, string separator)
         {
             string result = "";
             foreach (string item in GetItems(delimiter))
