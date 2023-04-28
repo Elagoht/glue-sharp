@@ -20,6 +20,11 @@ namespace Glue
             // Remove last line
             return result.Substring(0, result.Length - 1);
         }
+        public static string VerticalAligned(char delimiter, string separator, Direction direction, InpFile[] inpFiles)
+        {
+
+            return "";
+        }
         private static int[] ColumnSizes(char delimiter, InpFile[] inpFiles)
         {
             // Get widths in all list
