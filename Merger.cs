@@ -1,13 +1,13 @@
 namespace Glue
 {
+    public enum Alignment
+    {
+        Left,
+        Center,
+        Right
+    }
     public static class Merger
     {
-        public enum Direction
-        {
-            Left,
-            Center,
-            Right
-        }
         public static string Vertical(string delimiter, string separator, InpFile[] inpFiles)
         {
             string result = "";
@@ -21,7 +21,7 @@ namespace Glue
             return result.Substring(0, result.Length - 1);
         }
         // Align as vertical lines
-        public static string VerticalAligned(string delimiter, string separator, Direction direction, char filler, InpFile[] inpFiles)
+        public static string VerticalAligned(string delimiter, string separator, Alignment alignment, char filler, InpFile[] inpFiles)
         {
             string result = "";
             int[] widths = ColumnSizes(delimiter, inpFiles);
@@ -32,12 +32,12 @@ namespace Glue
                 {
                     if (index < items.Length)
                     {
-                        switch (direction)
+                        switch (alignment)
                         {
-                            case Direction.Center:
+                            case Alignment.Center:
                                 result += Aligner.CenterAlign(items[index], widths[index], filler) + separator;
                                 break;
-                            case Direction.Right:
+                            case Alignment.Right:
                                 result += Aligner.RightAlign(items[index], widths[index], filler) + separator;
                                 break;
                             default:

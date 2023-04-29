@@ -6,6 +6,8 @@ namespace Glue
     {
         static string delimiter = "\n";
         static string separator = " ";
+        static string filler = " ";
+        static Alignment alignment = Alignment.Left;
         static bool help = false;
 
         static int Main(string[] args)
@@ -19,8 +21,21 @@ namespace Glue
             // Check arguments
             OptionSet optionSet = new OptionSet() {
             {"h|help",  "Show this message and exit", value => help = value != null },
-            {"d=|delimiter=", "Determine what the delimiter should be", (string value) => delimiter = value },
-            {"s=|separator=", "Determine what the separator should be", (string value) => separator = value }};
+            {"a=|alignment=", @"Determine what alignment will be used.
+Valid values: 
+    To left   : (default)
+    To center : 0 | center
+    To right  : 1 | right", (string value) => alignment = value == "0" || value.ToLower() =="center"
+                    ? Alignment.Center
+                    : (value == "1" || value.ToLower() == "right"
+                        ? Alignment.Right
+                        : Alignment.Left )
+            },
+            { "d=|delimiter=", "Determine what the delimiter should be", (string value) => delimiter = value
+    },
+            { "s=|separator=", "Determine what the separator should be", (string value) => separator = value
+}
+        };
             string[] files = { };
             try
             {
@@ -44,8 +59,9 @@ namespace Glue
                 /* Console.WriteLine(
                     Merger.Vertical(delimiter, separator, GetInpFiles(files))
                 ); */
+
                 Console.WriteLine(
-                    Merger.VerticalAligned(delimiter, separator, Merger.Direction.Center, ' ', GetInpFiles(files))
+                    Merger.VerticalAligned(delimiter, separator, alignment, char.Parse(filler), GetInpFiles(files))
                 );
             }
             // Default Exit
