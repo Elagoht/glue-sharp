@@ -18,11 +18,11 @@ namespace Glue
                 Environment.Exit(126);
             }
         }
-        public string[] Items(char delimiter)
+        public string[] Items(string delimiter)
         {
             return this.Content.Split(delimiter);
         }
-        public int[] Widths(char delimiter)
+        public int[] Widths(string delimiter)
         {
             List<string> items = Items(delimiter).ToList<string>();
             int[] widths = new int[items.Count()];
@@ -32,11 +32,11 @@ namespace Glue
             }
             return widths;
         }
-        public int LineCount(char delimiter)
+        public int LineCount(string delimiter)
         {
             return this.Content.Split(delimiter).Count();
         }
-        public string Merged(char delimiter, string separator)
+        public string Merged(string delimiter, string separator)
         {
             string result = "";
             foreach (string item in Items(delimiter))

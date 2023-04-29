@@ -8,7 +8,7 @@ namespace Glue
             Center,
             Right
         }
-        public static string Vertical(char delimiter, string separator, InpFile[] inpFiles)
+        public static string Vertical(string delimiter, string separator, InpFile[] inpFiles)
         {
             string result = "";
             foreach (InpFile inpFile in inpFiles)
@@ -21,7 +21,7 @@ namespace Glue
             return result.Substring(0, result.Length - 1);
         }
         // Align as vertical lines
-        public static string VerticalAligned(char delimiter, string separator, Direction direction, char filler, InpFile[] inpFiles)
+        public static string VerticalAligned(string delimiter, string separator, Direction direction, char filler, InpFile[] inpFiles)
         {
             string result = "";
             int[] widths = ColumnSizes(delimiter, inpFiles);
@@ -47,11 +47,11 @@ namespace Glue
                     }
                 }
                 result = result.Substring(0, result.Length - separator.Length);
-                result += '\n';
+                result += "\n";
             }
             return result.Substring(0, result.Length - 1);
         }
-        private static int[] ColumnSizes(char delimiter, InpFile[] inpFiles)
+        private static int[] ColumnSizes(string delimiter, InpFile[] inpFiles)
         {
             // Get widths in all list
             List<int[]> widths = new List<int[]>();

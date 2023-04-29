@@ -4,7 +4,7 @@ namespace Glue
 {
     public static class Program
     {
-        static char delimiter = '\n';
+        static string delimiter = "\n";
         static string separator = " ";
         static bool help = false;
 
@@ -19,7 +19,7 @@ namespace Glue
             // Check arguments
             OptionSet optionSet = new OptionSet() {
             {"h|help",  "Show this message and exit", value => help = value != null },
-            {"d=|delimiter=", "Determine what the delimiter should be", (char value) => delimiter = value },
+            {"d=|delimiter=", "Determine what the delimiter should be", (string value) => delimiter = value },
             {"s=|separator=", "Determine what the separator should be", (string value) => separator = value }};
             string[] files = { };
             try
@@ -45,7 +45,7 @@ namespace Glue
                     Merger.Vertical(delimiter, separator, GetInpFiles(files))
                 ); */
                 Console.WriteLine(
-                    Merger.VerticalAligned(delimiter, separator, Merger.Direction.Right, ' ', GetInpFiles(files))
+                    Merger.VerticalAligned(delimiter, separator, Merger.Direction.Center, ' ', GetInpFiles(files))
                 );
             }
             // Default Exit
