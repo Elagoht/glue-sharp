@@ -4,14 +4,15 @@ namespace Glue
 {
     public static class Program
     {
-        static string delimiter = "\n";
-        static string separator = " ";
-        static char filler = ' ';
-        static Alignment alignment = Alignment.Left;
-        static bool align = true;
-        static bool help = false;
+        private static string delimiter = "\n";
+        private static string separator = " ";
+        private static char filler = ' ';
+        private static Alignment alignment = Alignment.Left;
+        private static bool align = true;
+        private static bool transpose = false;
+        private static bool help = false;
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             // If there is no argument, close
             if (args.Length == 0)
@@ -36,10 +37,11 @@ namespace Glue
                                 : Alignment.Left );
                     }
                 },
-                { "n|no-align", "Do not align fields, overwrites alignment optin", (string value)=> { align = value != "no-align" && value !="n"; } },
+                { "n|noalign", "Do not align fields, overwrites alignment option", (string value)=> { align = value != "no-align" && value !="n"; } },
                 { "d=|delimiter=", "String value that will split the file contents", (string value) => { delimiter = value; } },
                 { "s=|separator=", "String value that will bind the new parts", (string value) => { separator = value; } } ,
                 { "f=|filler=", "Determine what empty areas will be filled with", (string value) => { filler = char.Parse(value.Substring(0,1)); } },
+                { "t|transpose", "Replace columns and rows", (string value) => { transpose = value == "transpose" || value == "t"; } }
             };
 
             // Get unregistered arguments as files
@@ -66,21 +68,34 @@ namespace Glue
 
             // Default action
             {
-                if (align)
+                if (transpose)
                 {
-                    Console.WriteLine(Merger.VerticalAligned(delimiter, separator, alignment, filler, InpFiles(files)));
+                    if (align)
+                    {
+                        Console.WriteLine(Merger.VerticalAligned(delimiter, separator, alignment, filler, InpFiles(files)));
+                    }
+                    else
+                    {
+                        Console.WriteLine(Merger.Vertical(delimiter, separator, InpFiles(files)));
+                    }
                 }
                 else
                 {
-                    Console.WriteLine(Merger.Vertical(delimiter, separator, InpFiles(files)));
+                    if (align)
+                    {
+                        Console.WriteLine(Merger.HorizontalAligned(delimiter, separator, alignment, filler, InpFiles(files)));
+                    }
+                    else
+                    {
+                        Console.WriteLine(Merger.Horizontal(delimiter, separator, InpFiles(files)));
+                    }
                 }
             }
-
             // Default Exit
             Environment.Exit(0);
         }
         // Get all input files
-        static InpFile[] InpFiles(string[] fileNames)
+        private static InpFile[] InpFiles(string[] fileNames)
         {
             InpFile[] inpFiles = new InpFile[fileNames.Length];
             for (int index = 0; index < fileNames.Length; index++)
@@ -89,7 +104,7 @@ namespace Glue
             }
             return inpFiles;
         }
-        static void ShowHelp(OptionSet options)
+        private static void ShowHelp(OptionSet options)
         {
             Console.WriteLine("Usage: sharpglue [OPTIONS] [INPUT FILES]");
             Console.WriteLine("Options:");

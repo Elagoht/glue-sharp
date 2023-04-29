@@ -1,5 +1,11 @@
 namespace Glue
 {
+    public enum Alignment
+    {
+        Left,
+        Center,
+        Right
+    }
     public static class Aligner
     {
         // Align Left

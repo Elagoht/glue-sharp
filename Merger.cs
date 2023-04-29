@@ -1,11 +1,5 @@
 namespace Glue
 {
-    public enum Alignment
-    {
-        Left,
-        Center,
-        Right
-    }
     public static class Merger
     {
         public static string Vertical(string delimiter, string separator, InpFile[] inpFiles)
@@ -20,11 +14,10 @@ namespace Glue
             // Remove last line
             return result.Substring(0, result.Length - 1);
         }
-        // Align as vertical lines
         public static string VerticalAligned(string delimiter, string separator, Alignment alignment, char filler, InpFile[] inpFiles)
         {
             string result = "";
-            int[] widths = ColumnSizes(delimiter, inpFiles);
+            int[] widths = GroupInfo.ColumnSizes(delimiter, inpFiles);
             foreach (InpFile inpFile in inpFiles)
             {
                 string[] items = inpFile.Items(delimiter);
@@ -51,39 +44,43 @@ namespace Glue
             }
             return result.Substring(0, result.Length - 1);
         }
-        private static int[] ColumnSizes(string delimiter, InpFile[] inpFiles)
+        public static string Horizontal(string delimiter, string separator, InpFile[] inpFiles)
         {
-            // Get widths in all list
-            List<int[]> widths = new List<int[]>();
+            string result = "";
             foreach (InpFile inpFile in inpFiles)
             {
-                widths.Add(inpFile.Widths(delimiter));
+                result += string.Join(separator, inpFile.Items(delimiter)) + '\n';
             }
-
-            // Get max file length
-            List<int> lineNumbers = new List<int>();
-            foreach (InpFile inpFile in inpFiles)
-            {
-                lineNumbers.Add(inpFile.LineCount(delimiter));
-            }
-            int totalLines = lineNumbers.Max<int>();
-
-            // Get Column Widths
-            List<int> result = new List<int>();
+            return result.Substring(0, result.Length - 1);
+        }
+        public static string HorizontalAligned(string delimiter, string separator, Alignment alignment, char filler, InpFile[] inpFiles)
+        {
+            string result = "";
+            int[] widths = GroupInfo.RowSizes(delimiter, inpFiles);
+            int totalLines = GroupInfo.MaxLineCount(delimiter, inpFiles);
             for (int line = 0; line < totalLines; line++)
             {
-                List<int> currentMax = new List<int>();
-                for (int fileNum = 0; fileNum < inpFiles.Count(); fileNum++)
+                for (int file = 0; file < inpFiles.Count(); file++)
                 {
-                    if (line < inpFiles[fileNum].LineCount(delimiter))
+                    if (line < inpFiles[file].LineCount(delimiter))
                     {
-                        currentMax.Add(widths[fileNum][line]);
+                        switch (alignment)
+                        {
+                            case Alignment.Center:
+                                result += Aligner.CenterAlign(inpFiles[file].Items(delimiter)[line], widths[file], filler) + separator;
+                                break;
+                            case Alignment.Right:
+                                result += Aligner.RightAlign(inpFiles[file].Items(delimiter)[line], widths[file], filler) + separator;
+                                break;
+                            default:
+                                result += Aligner.LeftAlign(inpFiles[file].Items(delimiter)[line], widths[file], filler) + separator;
+                                break;
+                        }
                     }
                 }
-                result.Add(currentMax.Max());
+                result = result.Substring(0, result.Length - separator.Length) + '\n';
             }
-            // Return result
-            return result.ToArray<int>();
+            return result.Substring(0, result.Length - 1);
         }
     }
 }
