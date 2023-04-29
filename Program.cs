@@ -6,11 +6,12 @@ namespace Glue
     {
         static string delimiter = "\n";
         static string separator = " ";
-        static string filler = " ";
+        static char filler = ' ';
         static Alignment alignment = Alignment.Left;
+        static bool align = true;
         static bool help = false;
 
-        static int Main(string[] args)
+        static void Main(string[] args)
         {
             // If there is no argument, close
             if (args.Length == 0)
@@ -20,55 +21,66 @@ namespace Glue
             }
             // Check arguments
             OptionSet optionSet = new OptionSet() {
-            {"h|help",  "Show this message and exit", value => help = value != null },
-            {"a=|alignment=", @"Determine what alignment will be used.
-Valid values: 
-    To left   : (default)
-    To center : 0 | center
-    To right  : 1 | right", (string value) => alignment = value == "0" || value.ToLower() =="center"
-                    ? Alignment.Center
-                    : (value == "1" || value.ToLower() == "right"
-                        ? Alignment.Right
-                        : Alignment.Left )
-            },
-            { "d=|delimiter=", "Determine what the delimiter should be", (string value) => delimiter = value
-    },
-            { "s=|separator=", "Determine what the separator should be", (string value) => separator = value
-}
-        };
+                {"h|help",  "Show this message and exit", value => help = value != null },
+                {"a=|alignment=",
+@"Determine what alignment will be used
+    Valid values : 
+       To left   : (default)
+       To center : 0 | center
+       To right  : 1 | right",
+                    (string value) => {
+                        alignment = value == "0" || value.ToLower() =="center"
+                            ? Alignment.Center
+                            : (value == "1" || value.ToLower() == "right"
+                                ? Alignment.Right
+                                : Alignment.Left );
+                    }
+                },
+                { "n|no-align", "Do not align fields, overwrites alignment optin", (string value)=> { align = value != "no-align" && value !="n"; } },
+                { "d=|delimiter=", "String value that will split the file contents", (string value) => { delimiter = value; } },
+                { "s=|separator=", "String value that will bind the new parts", (string value) => { separator = value; } } ,
+                { "f=|filler=", "Determine what empty areas will be filled with", (string value) => { filler = char.Parse(value.Substring(0,1)); } },
+            };
+
+            // Get unregistered arguments as files
             string[] files = { };
+
             try
             {
-                // Get remaining arguments as files
                 files = optionSet.Parse(args).ToArray();
             }
             catch (OptionException e)
             {
+                // If cannot parse options show help and exit
                 Console.WriteLine(e.Message);
-                Console.WriteLine("Try `--help` for more information.");
+                ShowHelp(optionSet);
                 Environment.Exit(1);
             }
-            // Help Page
+
+            // Show help page
             if (help)
             {
                 ShowHelp(optionSet);
                 Environment.Exit(0);
             }
+
             // Default action
             {
-                /* Console.WriteLine(
-                    Merger.Vertical(delimiter, separator, GetInpFiles(files))
-                ); */
-
-                Console.WriteLine(
-                    Merger.VerticalAligned(delimiter, separator, alignment, char.Parse(filler), GetInpFiles(files))
-                );
+                if (align)
+                {
+                    Console.WriteLine(Merger.VerticalAligned(delimiter, separator, alignment, filler, InpFiles(files)));
+                }
+                else
+                {
+                    Console.WriteLine(Merger.Vertical(delimiter, separator, InpFiles(files)));
+                }
             }
+
             // Default Exit
-            return 0;
+            Environment.Exit(0);
         }
         // Get all input files
-        static InpFile[] GetInpFiles(string[] fileNames)
+        static InpFile[] InpFiles(string[] fileNames)
         {
             InpFile[] inpFiles = new InpFile[fileNames.Length];
             for (int index = 0; index < fileNames.Length; index++)
