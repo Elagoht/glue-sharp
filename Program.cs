@@ -45,7 +45,7 @@ namespace Glue
                     Merger.Vertical(delimiter, separator, GetInpFiles(files))
                 ); */
                 Console.WriteLine(
-                    Merger.VerticalAligned(delimiter, separator, Merger.Direction.Left, GetInpFiles(files))
+                    Merger.VerticalAligned(delimiter, separator, Merger.Direction.Right, ' ', GetInpFiles(files))
                 );
             }
             // Default Exit

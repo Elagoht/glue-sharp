@@ -18,13 +18,13 @@ namespace Glue
                 Environment.Exit(126);
             }
         }
-        public string[] GetItems(char delimiter)
+        public string[] Items(char delimiter)
         {
             return this.Content.Split(delimiter);
         }
         public int[] Widths(char delimiter)
         {
-            List<string> items = GetItems(delimiter).ToList<string>();
+            List<string> items = Items(delimiter).ToList<string>();
             int[] widths = new int[items.Count()];
             for (int index = 0; index < items.Count(); index++)
             {
@@ -39,7 +39,7 @@ namespace Glue
         public string Merged(char delimiter, string separator)
         {
             string result = "";
-            foreach (string item in GetItems(delimiter))
+            foreach (string item in Items(delimiter))
             {
                 result += item + separator;
             }

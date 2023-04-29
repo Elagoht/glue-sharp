@@ -20,10 +20,36 @@ namespace Glue
             // Remove last line
             return result.Substring(0, result.Length - 1);
         }
-        public static string VerticalAligned(char delimiter, string separator, Direction direction, InpFile[] inpFiles)
+        // Align as vertical lines
+        public static string VerticalAligned(char delimiter, string separator, Direction direction, char filler, InpFile[] inpFiles)
         {
-
-            return "";
+            string result = "";
+            int[] widths = ColumnSizes(delimiter, inpFiles);
+            foreach (InpFile inpFile in inpFiles)
+            {
+                string[] items = inpFile.Items(delimiter);
+                for (int index = 0; index < widths.Length; index++)
+                {
+                    if (index < items.Length)
+                    {
+                        switch (direction)
+                        {
+                            case Direction.Center:
+                                result += Aligner.CenterAlign(items[index], widths[index], filler) + separator;
+                                break;
+                            case Direction.Right:
+                                result += Aligner.RightAlign(items[index], widths[index], filler) + separator;
+                                break;
+                            default:
+                                result += Aligner.LeftAlign(items[index], widths[index], filler) + separator;
+                                break;
+                        }
+                    }
+                }
+                result = result.Substring(0, result.Length - separator.Length);
+                result += '\n';
+            }
+            return result.Substring(0, result.Length - 1);
         }
         private static int[] ColumnSizes(char delimiter, InpFile[] inpFiles)
         {
