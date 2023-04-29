@@ -12,16 +12,32 @@ it in C# with OOP. The original tool was written in Python.
 
 try this commands and check file contents to understand working logic.
 
-```sh
-glue-sharp header.csv data.csv -d ";" -s " | "
-   Full Name    |        Job         |          Email           |       Languages       
-Furkan Baytekin | Software Developer | furkanbaytekin@gmail.com | Python, JavaScript, C#
-```
+**Example:**
 
 ```sh
-glue-sharp header.txt data.txt -s " | "
-   Full Name    |        Job         |          Email           |       Languages       
-Furkan Baytekin | Software Developer | furkanbaytekin@gmail.com | Python, JavaScript, C#
+$ sharpglue header.csv data.csv -f "_" -s " | " -d ";"
+```
+
+**Result:**
+
+```
+Full Name | Furkan Baytekin_________
+Job______ | Software Developer______
+Email____ | furkanbaytekin@gmail.com
+Languages | Python, JavaScript, C#__
+```
+
+**Example:**
+
+```sh
+sharpglue header.txt data.txt -t -f "." -a center -s '   '
+```
+
+**Result:**
+
+```
+...Full Name...   .......Job........   .........Email..........   ......Languages.......
+Furkan Baytekin   Software Developer   furkanbaytekin@gmail.com   Python, JavaScript, C#
 ```
 
 ## Under Development!
