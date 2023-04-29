@@ -8,6 +8,28 @@ This is a C# clone of glue commandline tool. Glue is a commandline tool to paste
 There's a paste command for it but it cannot align texts. Glue does that. Now, I remake
 it in C# with OOP. The original tool was written in Python.
 
+## Help Page
+
+```
+$ sharpglue --help
+```
+
+```
+Usage: sharpglue [OPTIONS] [INPUT FILES]
+Options:
+  -h, --help                 Show this message and exit
+  -a, --alignment=VALUE      Determine what alignment will be used
+                               Valid values : 
+                                  To left   : (default)
+                                  To center : 0 | center
+                                  To right  : 1 | right
+  -n, --noalign              Do not align fields, overwrites alignment option
+  -d, --delimiter=VALUE      String value that will split the file contents
+  -s, --separator=VALUE      String value that will bind the new parts
+  -f, --filler=VALUE         Determine what empty areas will be filled with
+  -t, --transpose            Swap columns and rows
+```
+
 ## Examples
 
 try this commands and check file contents to understand working logic.
@@ -30,7 +52,7 @@ Languages | Python, JavaScript, C#__
 **Example:**
 
 ```sh
-sharpglue header.txt data.txt -t -f "." -a center -s '   '
+$ sharpglue header.txt data.txt -t -f "." -a center -s '   '
 ```
 
 **Result:**

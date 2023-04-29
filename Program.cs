@@ -25,10 +25,10 @@ namespace Glue
                 {"h|help",  "Show this message and exit", value => help = value != null },
                 {"a=|alignment=",
 @"Determine what alignment will be used
-    Valid values : 
-       To left   : (default)
-       To center : 0 | center
-       To right  : 1 | right",
+Valid values : 
+   To left   : (default)
+   To center : 0 | center
+   To right  : 1 | right",
                     (string value) => {
                         alignment = value == "0" || value.ToLower() =="center"
                             ? Alignment.Center
@@ -41,7 +41,7 @@ namespace Glue
                 { "d=|delimiter=", "String value that will split the file contents", (string value) => { delimiter = value; } },
                 { "s=|separator=", "String value that will bind the new parts", (string value) => { separator = value; } } ,
                 { "f=|filler=", "Determine what empty areas will be filled with", (string value) => { filler = char.Parse(value.Substring(0,1)); } },
-                { "t|transpose", "Replace columns and rows", (string value) => { transpose = value == "transpose" || value == "t"; } }
+                { "t|transpose", "Swap columns and rows", (string value) => { transpose = value == "transpose" || value == "t"; } }
             };
 
             // Get unregistered arguments as files
