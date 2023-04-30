@@ -28,7 +28,7 @@ namespace Glue
         }
         public int LineCount(string delimiter)
         {
-            return this.Content.Split(delimiter).Count();
+            return Items(delimiter).Count();
         }
         public string Merged(string delimiter, string separator)
         {

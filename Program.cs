@@ -83,15 +83,15 @@ Valid values :
             {
                 if (align)
                 {
-                    Merger.VerticalAligned(delimiter, separator, alignment, filler, InpFiles(files));
+                    Merger.HorizontalAligned(delimiter, separator, alignment, filler, InpFiles(files));
                 }
-                Merger.Vertical(delimiter, separator, InpFiles(files));
+                Merger.Horizontal(delimiter, separator, InpFiles(files));
             }
             if (align)
             {
-                Merger.HorizontalAligned(delimiter, separator, alignment, filler, InpFiles(files));
+                Merger.VerticalAligned(delimiter, separator, alignment, filler, InpFiles(files));
             }
-            Merger.Horizontal(delimiter, separator, InpFiles(files));
+            Merger.Vertical(delimiter, separator, InpFiles(files));
 
             // Default Exit
             Environment.Exit(0);

@@ -2,14 +2,14 @@ namespace Glue
 {
     public static class Merger
     {
-        public static void Vertical(string delimiter, string separator, InpFile[] inpFiles)
+        public static void Horizontal(string delimiter, string separator, InpFile[] inpFiles)
         {
             string result = "";
             foreach (InpFile inpFile in inpFiles) result += string.Join(separator, inpFile.Items(delimiter)) + '\n';
             Console.Write(result);
             Environment.Exit(0);
         }
-        public static void VerticalAligned(string delimiter, string separator, Alignment alignment, char filler, InpFile[] inpFiles)
+        public static void HorizontalAligned(string delimiter, string separator, Alignment alignment, char filler, InpFile[] inpFiles)
         {
             string result = "";
             int[] widths = GroupInfo.ColumnSizes(delimiter, inpFiles);
@@ -38,7 +38,7 @@ namespace Glue
             Console.Write(result);
             Environment.Exit(0);
         }
-        public static void Horizontal(string delimiter, string separator, InpFile[] inpFiles)
+        public static void Vertical(string delimiter, string separator, InpFile[] inpFiles)
         {
             string result = "";
             int[] widths = GroupInfo.RowSizes(delimiter, inpFiles);
@@ -56,7 +56,7 @@ namespace Glue
             Console.Write(result);
             Environment.Exit(0);
         }
-        public static void HorizontalAligned(string delimiter, string separator, Alignment alignment, char filler, InpFile[] inpFiles)
+        public static void VerticalAligned(string delimiter, string separator, Alignment alignment, char filler, InpFile[] inpFiles)
         {
             string result = "";
             int[] widths = GroupInfo.RowSizes(delimiter, inpFiles);
