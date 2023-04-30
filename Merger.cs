@@ -2,19 +2,17 @@ namespace Glue
 {
     public static class Merger
     {
-        public static string Vertical(string delimiter, string separator, InpFile[] inpFiles)
+        public static void Vertical(string delimiter, string separator, InpFile[] inpFiles)
         {
             string result = "";
             foreach (InpFile inpFile in inpFiles)
             {
-                // Add items seperated
-                string line = inpFile.Merged(delimiter, separator);
-                result += line + "\n";
+                result += string.Join(separator, inpFile.Items(delimiter)) + '\n';
             }
-            // Remove last line
-            return result.Substring(0, result.Length - 1);
+            Console.Write(result);
+            Environment.Exit(0);
         }
-        public static string VerticalAligned(string delimiter, string separator, Alignment alignment, char filler, InpFile[] inpFiles)
+        public static void VerticalAligned(string delimiter, string separator, Alignment alignment, char filler, InpFile[] inpFiles)
         {
             string result = "";
             int[] widths = GroupInfo.ColumnSizes(delimiter, inpFiles);
@@ -42,18 +40,30 @@ namespace Glue
                 result = result.Substring(0, result.Length - separator.Length);
                 result += "\n";
             }
-            return result.Substring(0, result.Length - 1);
+            Console.Write(result);
+            Environment.Exit(0);
         }
-        public static string Horizontal(string delimiter, string separator, InpFile[] inpFiles)
+        public static void Horizontal(string delimiter, string separator, InpFile[] inpFiles)
         {
             string result = "";
-            foreach (InpFile inpFile in inpFiles)
+            int[] widths = GroupInfo.RowSizes(delimiter, inpFiles);
+            int totalLines = GroupInfo.MaxLineCount(delimiter, inpFiles);
+            for (int line = 0; line < totalLines; line++)
             {
-                result += string.Join(separator, inpFile.Items(delimiter)) + '\n';
+                for (int file = 0; file < inpFiles.Count(); file++)
+                {
+                    if (line < inpFiles[file].LineCount(delimiter))
+                    {
+                        result += inpFiles[file].Items(delimiter)[line] + separator;
+                    }
+                }
+                result += '\n';
             }
-            return result.Substring(0, result.Length - 1);
+            result = result.Substring(0, result.Length - separator.Length) + '\n';
+            Console.Write(result);
+            Environment.Exit(0);
         }
-        public static string HorizontalAligned(string delimiter, string separator, Alignment alignment, char filler, InpFile[] inpFiles)
+        public static void HorizontalAligned(string delimiter, string separator, Alignment alignment, char filler, InpFile[] inpFiles)
         {
             string result = "";
             int[] widths = GroupInfo.RowSizes(delimiter, inpFiles);
@@ -80,7 +90,8 @@ namespace Glue
                 }
                 result = result.Substring(0, result.Length - separator.Length) + '\n';
             }
-            return result.Substring(0, result.Length - 1);
+            Console.Write(result);
+            Environment.Exit(0);
         }
     }
 }
