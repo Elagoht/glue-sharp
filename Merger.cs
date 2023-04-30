@@ -18,18 +18,24 @@ namespace Glue
                 string[] items = inpFile.Items(delimiter);
                 for (int index = 0; index < widths.Length; index++)
                 {
-                    if (index > items.Length) continue;
-                    switch (alignment)
+                    if (index < items.Length)
                     {
-                        case Alignment.Center:
-                            result += Aligner.CenterAlign(items[index], widths[index], filler) + separator;
-                            break;
-                        case Alignment.Right:
-                            result += Aligner.RightAlign(items[index], widths[index], filler) + separator;
-                            break;
-                        default:
-                            result += Aligner.LeftAlign(items[index], widths[index], filler) + separator;
-                            break;
+                        switch (alignment)
+                        {
+                            case Alignment.Center:
+                                result += Aligner.CenterAlign(items[index], widths[index], filler) + separator;
+                                break;
+                            case Alignment.Right:
+                                result += Aligner.RightAlign(items[index], widths[index], filler) + separator;
+                                break;
+                            default:
+                                result += Aligner.LeftAlign(items[index], widths[index], filler) + separator;
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        result += Aligner.CenterAlign("", widths[index], filler) + separator;
                     }
                 }
                 result = result.Substring(0, result.Length - separator.Length);
@@ -47,8 +53,8 @@ namespace Glue
             {
                 for (int file = 0; file < inpFiles.Count(); file++)
                 {
-                    if (line > inpFiles[file].LineCount(delimiter)) continue;
-                    result += inpFiles[file].Items(delimiter)[line] + separator;
+                    if (line < inpFiles[file].LineCount(delimiter))
+                        result += inpFiles[file].Items(delimiter)[line] + separator;
                 }
                 result += '\n';
             }
@@ -65,18 +71,24 @@ namespace Glue
             {
                 for (int file = 0; file < inpFiles.Count(); file++)
                 {
-                    if (line > inpFiles[file].LineCount(delimiter)) continue;
-                    switch (alignment)
+                    if (line < inpFiles[file].LineCount(delimiter))
                     {
-                        case Alignment.Center:
-                            result += Aligner.CenterAlign(inpFiles[file].Items(delimiter)[line], widths[file], filler) + separator;
-                            break;
-                        case Alignment.Right:
-                            result += Aligner.RightAlign(inpFiles[file].Items(delimiter)[line], widths[file], filler) + separator;
-                            break;
-                        default:
-                            result += Aligner.LeftAlign(inpFiles[file].Items(delimiter)[line], widths[file], filler) + separator;
-                            break;
+                        switch (alignment)
+                        {
+                            case Alignment.Center:
+                                result += Aligner.CenterAlign(inpFiles[file].Items(delimiter)[line], widths[file], filler) + separator;
+                                break;
+                            case Alignment.Right:
+                                result += Aligner.RightAlign(inpFiles[file].Items(delimiter)[line], widths[file], filler) + separator;
+                                break;
+                            default:
+                                result += Aligner.LeftAlign(inpFiles[file].Items(delimiter)[line], widths[file], filler) + separator;
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        result += Aligner.CenterAlign("", widths[file], filler) + separator;
                     }
                 }
                 result = result.Substring(0, result.Length - separator.Length) + '\n';

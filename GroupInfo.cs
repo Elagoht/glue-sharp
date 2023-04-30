@@ -31,8 +31,8 @@ namespace Glue
                 List<int> currentMax = new List<int>();
                 for (int line = 0; line < totalLines; line++)
                 {
-                    if (line > inpFiles[fileNum].LineCount(delimiter)) continue;
-                    currentMax.Add(widths[fileNum][line]);
+                    if (line < inpFiles[fileNum].LineCount(delimiter))
+                        currentMax.Add(widths[fileNum][line]);
                 }
                 result.Add(currentMax.Max());
             }
@@ -52,8 +52,8 @@ namespace Glue
                 List<int> currentMax = new List<int>();
                 for (int fileNum = 0; fileNum < inpFiles.Count(); fileNum++)
                 {
-                    if (line > inpFiles[fileNum].LineCount(delimiter)) continue;
-                    currentMax.Add(widths[fileNum][line]);
+                    if (line < inpFiles[fileNum].LineCount(delimiter))
+                        currentMax.Add(widths[fileNum][line]);
                 }
                 result.Add(currentMax.Max());
             }
