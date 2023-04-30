@@ -84,17 +84,17 @@ Valid values :
                 }
             }
 
-            // If has no file input, close
-            if (files.Count() == 0)
-            {
-                Console.Error.WriteLine("\x1b[31;1mThere is no file input. Try --help for more information\x1b[0m");
-                Environment.Exit(0);
-            }
-
             // Show help page
             if (help)
             {
                 ShowHelp(optionSet);
+                Environment.Exit(0);
+            }
+
+            // If has no file input, close
+            if (files.Count() == 0)
+            {
+                Console.Error.WriteLine("\x1b[31;1mThere is no file input. Try --help for more information\x1b[0m");
                 Environment.Exit(0);
             }
 
@@ -128,9 +128,9 @@ Valid values :
         }
         private static void ShowHelp(OptionSet options)
         {
-            Console.WriteLine("Usage: sharpglue [OPTIONS] [INPUT FILES]");
-            Console.WriteLine("Options:");
+            Console.WriteLine("Usage: sharpglue [OPTIONS] [INPUT FILES]\nOptions:");
             options.WriteOptionDescriptions(Console.Out);
+            Console.WriteLine("\nDev Homepage : https://github.com/Elagoht/sharpglue\nBug Reports  : https://github.com/Elagoht/sharpglue/issues");
         }
     }
 }

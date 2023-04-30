@@ -30,6 +30,9 @@ Options:
   -t, --transpose            Swap columns and rows
       --csv                  Csv with semicolon, same as -t -n -s ";"
       --csv2                 Csv with comma, same as -t -n -s ","
+
+Dev Homepage : https://github.com/Elagoht/sharpglue
+Bug Reports  : https://github.com/Elagoht/sharpglue/issues
 ```
 
 ## Examples
@@ -41,8 +44,6 @@ try this commands and check file contents to understand working logic.
 ```sh
 $ sharpglue header.csv data.csv -f "_" -s " | " -d ";"
 ```
-
-**Result:**
 
 ```
 Full Name | Furkan Baytekin_________
@@ -56,8 +57,6 @@ Languages | Python, JavaScript, C#__
 ```sh
 $ sharpglue header.txt data.txt -t -f "." -a center -s '   '
 ```
-
-**Result:**
 
 ```
 ...Full Name...   .......Job........   .........Email..........   ......Languages.......
