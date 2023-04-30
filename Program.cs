@@ -15,9 +15,9 @@ namespace Glue
         private static void Main(string[] args)
         {
             // If there is no argument, close
-            if (args.Length == 0)
+            if (args.Length == 0 && !Console.IsInputRedirected)
             {
-                Console.WriteLine("Insufficent agruments.");
+                Console.Error.WriteLine("\x1b[31;Insufficent arguments. Try --help for more information.\x1b[0m");
                 Environment.Exit(1);
             }
             // Check arguments
@@ -56,19 +56,39 @@ Valid values :
                 }
             };
 
+
             // Get unregistered arguments as files
-            string[] files = { };
+            List<string> files = new List<string>();
 
             try
             {
-                files = optionSet.Parse(args).ToArray();
+                files = optionSet.Parse(args);
             }
-            catch (OptionException e)
+            catch (OptionException)
             {
                 // If cannot parse options show help and exit
-                Console.WriteLine(e.Message);
-                ShowHelp(optionSet);
+                Console.Error.WriteLine("\x1b[31;1mUnexpected error with commandline arguments. Try --help for more information.\x1b[0m");
                 Environment.Exit(1);
+            }
+
+            // Check if data piped from another process
+            if (Console.IsInputRedirected)
+            {
+                // Read piped data from the standard input
+                using (var reader = new StreamReader(Console.OpenStandardInput()))
+                {
+                    files.AddRange(
+                        reader.ReadToEnd().Trim() // Pipe data
+                        .Split(' ', '\n') // Piped file names
+                    ); // Add to existing files
+                }
+            }
+
+            // If has no file input, close
+            if (files.Count() == 0)
+            {
+                Console.Error.WriteLine("\x1b[31;1mThere is no file input. Try --help for more information\x1b[0m");
+                Environment.Exit(0);
             }
 
             // Show help page
@@ -97,10 +117,10 @@ Valid values :
             Environment.Exit(0);
         }
         // Get all input files
-        private static InpFile[] InpFiles(string[] fileNames)
+        private static InpFile[] InpFiles(List<string> fileNames)
         {
-            InpFile[] inpFiles = new InpFile[fileNames.Length];
-            for (int index = 0; index < fileNames.Length; index++)
+            InpFile[] inpFiles = new InpFile[fileNames.Count()];
+            for (int index = 0; index < fileNames.Count(); index++)
             {
                 inpFiles[index] = new InpFile(fileNames[index]);
             }

@@ -11,7 +11,17 @@ namespace Glue
             }
             catch (System.IO.FileNotFoundException)
             {
-                Console.Error.WriteLine("The file '{0}' is not accessible.", path);
+                Console.Error.WriteLine("\x1b[31;1mThe file '{0}' is not accessible.\x1b[0;m", path);
+                Environment.Exit(126);
+            }
+            catch (System.UnauthorizedAccessException)
+            {
+                Console.Error.WriteLine("\x1b[31;1mYou have no permission to read the file '{0}'.\x1b[0;m", path);
+                Environment.Exit(126);
+            }
+            catch
+            {
+                Console.Error.WriteLine("\x1b[31;1mAn unexpected error occurred.");
                 Environment.Exit(126);
             }
         }
