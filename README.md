@@ -28,6 +28,8 @@ Options:
   -s, --separator=VALUE      String value that will bind the new parts
   -f, --filler=VALUE         Determine what empty areas will be filled with
   -t, --transpose            Swap columns and rows
+      --csv                  Csv with semicolon, same as -t -n -s ";"
+      --csv2                 Csv with comma, same as -t -n -s ","
 ```
 
 ## Examples
