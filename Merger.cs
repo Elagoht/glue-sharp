@@ -5,10 +5,7 @@ namespace Glue
         public static void Vertical(string delimiter, string separator, InpFile[] inpFiles)
         {
             string result = "";
-            foreach (InpFile inpFile in inpFiles)
-            {
-                result += string.Join(separator, inpFile.Items(delimiter)) + '\n';
-            }
+            foreach (InpFile inpFile in inpFiles) result += string.Join(separator, inpFile.Items(delimiter)) + '\n';
             Console.Write(result);
             Environment.Exit(0);
         }
@@ -21,20 +18,18 @@ namespace Glue
                 string[] items = inpFile.Items(delimiter);
                 for (int index = 0; index < widths.Length; index++)
                 {
-                    if (index < items.Length)
+                    if (index > items.Length) continue;
+                    switch (alignment)
                     {
-                        switch (alignment)
-                        {
-                            case Alignment.Center:
-                                result += Aligner.CenterAlign(items[index], widths[index], filler) + separator;
-                                break;
-                            case Alignment.Right:
-                                result += Aligner.RightAlign(items[index], widths[index], filler) + separator;
-                                break;
-                            default:
-                                result += Aligner.LeftAlign(items[index], widths[index], filler) + separator;
-                                break;
-                        }
+                        case Alignment.Center:
+                            result += Aligner.CenterAlign(items[index], widths[index], filler) + separator;
+                            break;
+                        case Alignment.Right:
+                            result += Aligner.RightAlign(items[index], widths[index], filler) + separator;
+                            break;
+                        default:
+                            result += Aligner.LeftAlign(items[index], widths[index], filler) + separator;
+                            break;
                     }
                 }
                 result = result.Substring(0, result.Length - separator.Length);
@@ -52,10 +47,8 @@ namespace Glue
             {
                 for (int file = 0; file < inpFiles.Count(); file++)
                 {
-                    if (line < inpFiles[file].LineCount(delimiter))
-                    {
-                        result += inpFiles[file].Items(delimiter)[line] + separator;
-                    }
+                    if (line > inpFiles[file].LineCount(delimiter)) continue;
+                    result += inpFiles[file].Items(delimiter)[line] + separator;
                 }
                 result += '\n';
             }
@@ -72,20 +65,18 @@ namespace Glue
             {
                 for (int file = 0; file < inpFiles.Count(); file++)
                 {
-                    if (line < inpFiles[file].LineCount(delimiter))
+                    if (line > inpFiles[file].LineCount(delimiter)) continue;
+                    switch (alignment)
                     {
-                        switch (alignment)
-                        {
-                            case Alignment.Center:
-                                result += Aligner.CenterAlign(inpFiles[file].Items(delimiter)[line], widths[file], filler) + separator;
-                                break;
-                            case Alignment.Right:
-                                result += Aligner.RightAlign(inpFiles[file].Items(delimiter)[line], widths[file], filler) + separator;
-                                break;
-                            default:
-                                result += Aligner.LeftAlign(inpFiles[file].Items(delimiter)[line], widths[file], filler) + separator;
-                                break;
-                        }
+                        case Alignment.Center:
+                            result += Aligner.CenterAlign(inpFiles[file].Items(delimiter)[line], widths[file], filler) + separator;
+                            break;
+                        case Alignment.Right:
+                            result += Aligner.RightAlign(inpFiles[file].Items(delimiter)[line], widths[file], filler) + separator;
+                            break;
+                        default:
+                            result += Aligner.LeftAlign(inpFiles[file].Items(delimiter)[line], widths[file], filler) + separator;
+                            break;
                     }
                 }
                 result = result.Substring(0, result.Length - separator.Length) + '\n';

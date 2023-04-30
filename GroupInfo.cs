@@ -6,10 +6,8 @@ namespace Glue
         {
             // Get widths in all list
             List<int[]> widths = new List<int[]>();
-            foreach (InpFile inpFile in inpFiles)
-            {
-                widths.Add(inpFile.Widths(delimiter));
-            }
+            foreach (InpFile inpFile in inpFiles) widths.Add(inpFile.Widths(delimiter));
+
             return widths;
         }
 
@@ -17,10 +15,8 @@ namespace Glue
         {
             // Get max file length
             List<int> lineNumbers = new List<int>();
-            foreach (InpFile inpFile in inpFiles)
-            {
-                lineNumbers.Add(inpFile.LineCount(delimiter));
-            }
+            foreach (InpFile inpFile in inpFiles) lineNumbers.Add(inpFile.LineCount(delimiter));
+
             return lineNumbers.Max<int>();
         }
         public static int[] RowSizes(string delimiter, InpFile[] inpFiles)
@@ -35,10 +31,8 @@ namespace Glue
                 List<int> currentMax = new List<int>();
                 for (int line = 0; line < totalLines; line++)
                 {
-                    if (line < inpFiles[fileNum].LineCount(delimiter))
-                    {
-                        currentMax.Add(widths[fileNum][line]);
-                    }
+                    if (line > inpFiles[fileNum].LineCount(delimiter)) continue;
+                    currentMax.Add(widths[fileNum][line]);
                 }
                 result.Add(currentMax.Max());
             }
@@ -58,10 +52,8 @@ namespace Glue
                 List<int> currentMax = new List<int>();
                 for (int fileNum = 0; fileNum < inpFiles.Count(); fileNum++)
                 {
-                    if (line < inpFiles[fileNum].LineCount(delimiter))
-                    {
-                        currentMax.Add(widths[fileNum][line]);
-                    }
+                    if (line > inpFiles[fileNum].LineCount(delimiter)) continue;
+                    currentMax.Add(widths[fileNum][line]);
                 }
                 result.Add(currentMax.Max());
             }
