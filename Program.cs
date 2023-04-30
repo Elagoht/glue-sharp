@@ -17,7 +17,7 @@ namespace Glue
             // If there is no argument, close
             if (args.Length == 0 && !Console.IsInputRedirected)
             {
-                Console.Error.WriteLine("\x1b[31;Insufficent arguments. Try --help for more information.\x1b[0m");
+                Console.Error.WriteLine("\x1b[31;1mInsufficent arguments. Try --help for more information.\x1b[0m");
                 Environment.Exit(1);
             }
             // Check arguments

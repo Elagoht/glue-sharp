@@ -21,7 +21,7 @@ namespace Glue
             }
             catch
             {
-                Console.Error.WriteLine("\x1b[31;1mAn unexpected error occurred.");
+                Console.Error.WriteLine("\x1b[31;1mAn unexpected error occurred.\x1b[0;m");
                 Environment.Exit(126);
             }
         }
