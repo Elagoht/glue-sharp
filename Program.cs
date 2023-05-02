@@ -10,6 +10,7 @@ namespace Glue
         private static Alignment alignment = Alignment.Left;
         private static bool align = true;
         private static bool transpose = false;
+        private static bool deleteLastBlank = false;
         private static bool help = false;
 
         private static void Main(string[] args)
@@ -39,23 +40,24 @@ Valid values :
                 { "d=|delimiter=", "String value that will split the file contents", (string value) => { delimiter = value; } },
                 { "s=|separator=", "String value that will bind the new parts", (string value) => { separator = value; } } ,
                 { "f=|filler=", "Determine what empty areas will be filled with", (string value) => { filler = char.Parse(value.Substring(0,1)); } },
-                { "t|transpose", "Swap columns and rows", (string value) => { transpose = value == "transpose" || value == "t"; } },
+                { "l|delete-last-blank", "Delete last blank lines to minimize the output", (string value) => {deleteLastBlank = value == "delete-last-blank" || value == "l"; } },
                 { "csv", "Csv with semicolon, same as -t -n -s \";\"", (string value) => {
                     if (transpose = value == "csv") {
-                        separator= ";";
-                        align=false;
-                        transpose=true;
+                        separator = ";";
+                        align = false;
+                        transpose = true;
+                        deleteLastBlank = true;
                     }}
                 },
                 { "csv2", "Csv with comma, same as -t -n -s \",\"", (string value) => {
                     if (transpose = value == "csv2") {
-                        separator= ",";
-                        align=false;
-                        transpose=true;
+                        separator = ",";
+                        align = false;
+                        transpose = true;
+                        deleteLastBlank = true;
                     }}
                 }
             };
-
 
             // Get unregistered arguments as files
             List<string> files = new List<string>();
@@ -123,6 +125,10 @@ Valid values :
             for (int index = 0; index < fileNames.Count(); index++)
             {
                 inpFiles[index] = new InpFile(fileNames[index]);
+                if (deleteLastBlank)
+                {
+                    inpFiles[index].DeleteLastBlankSlice(delimiter);
+                }
             }
             return inpFiles;
         }

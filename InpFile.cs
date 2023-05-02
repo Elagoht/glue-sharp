@@ -25,6 +25,13 @@ namespace Glue
                 Environment.Exit(126);
             }
         }
+        public void DeleteLastBlankSlice(string delimiter)
+        {
+            if (this.Content.Substring(this.Content.Length - delimiter.Length, delimiter.Length) == delimiter)
+            {
+                this.Content = this.Content.Substring(0, this.Content.Length - delimiter.Length * 2);
+            }
+        }
         public string[] Items(string delimiter)
         {
             return this.Content.Split(delimiter);
