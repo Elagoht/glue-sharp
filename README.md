@@ -1,5 +1,6 @@
 # C# Replica of My Project Glue 
 
+![Build](https://img.shields.io/github/actions/workflow/status/Elagoht/sharpglue/diffs.yml?style=for-the-badge)
 ![C#](https://shields.io/badge/C%23-239120?logo=csharp&logoColor=white&style=for-the-badge)
 ![Terminal](https://shields.io/badge/Terminal_Tool-241F31?logo=gnometerminal&logoColor=white&style=for-the-badge)
 ![CMD](https://shields.io/badge/CMD_Tool-4D4D4D?logo=windowsterminal&logoColor=white&style=for-the-badge)
