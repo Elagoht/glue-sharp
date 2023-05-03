@@ -4,6 +4,7 @@ namespace Glue
 {
     public static class Program
     {
+        // Create option variables 
         private static string delimiter = "\n";
         private static string separator = " ";
         private static char filler = ' ';
@@ -16,14 +17,14 @@ namespace Glue
         private static string headerDivider = "";
         private static void Main(string[] args)
         {
-            // If there is no argument, close
             if (args.Length == 0 && !Console.IsInputRedirected)
-            {
+            { // If there is no argument, warn the user
                 Console.Error.WriteLine("\x1b[31;1mInsufficent arguments. Try --help for more information.\x1b[0m");
                 Environment.Exit(1);
             }
-            // Check arguments
-            OptionSet optionSet = new OptionSet() {
+            // Check arguments and set options
+            OptionSet optionSet = new OptionSet()
+            {
                 {"h|help",  "Show this message and exit", value => help = value != null },
                 {"a=|alignment=",
 @"Determine what alignment will be used
@@ -78,76 +79,67 @@ Valid values :
             List<string> files = new List<string>();
 
             try
-            {
+            { // Get other arguments as files
                 files = optionSet.Parse(args);
             }
             catch (OptionException)
-            {
-                // If cannot parse options show help and exit
+            { // If cannot parse options show help and exit
                 Console.Error.WriteLine("\x1b[31;1mUnexpected error with commandline arguments. Try --help for more information.\x1b[0m");
                 Environment.Exit(1);
             }
 
             // Check if data piped from another process
             if (Console.IsInputRedirected)
-            {
-                // Read piped data from the standard input
                 using (var reader = new StreamReader(Console.OpenStandardInput()))
-                {
+                { // Read piped data from the standard input
                     files.AddRange(
                         reader.ReadToEnd().Trim() // Pipe data
                         .Split(' ', '\n') // Piped file names
                     ); // Add to existing files
                 }
-            }
 
-            // Show help page
-            if (help)
-            {
+            if (help) // Show help page
                 ShowHelp(optionSet);
-                Environment.Exit(0);
-            }
 
-            // If has no file input, close
             if (files.Count() == 0)
-            {
+            { // If has no file input, close
                 Console.Error.WriteLine("\x1b[31;1mThere is no file input. Try --help for more information\x1b[0m");
                 Environment.Exit(0);
             }
 
             // Default action
             if (transpose)
-            {
-                if (align)
+            { // If transposed
+                if (align) // if aligned call the method and exit
                     Merger.HorizontalAligned(delimiter, separator, alignment, filler, outerBorder, headerDivider, InpFiles(files));
+                // If not aligned call the method and exit
                 Merger.Horizontal(delimiter, separator, outerBorder, InpFiles(files));
             }
-            if (align)
+            if (align) // If aligned call the method and exit
                 Merger.VerticalAligned(delimiter, separator, alignment, filler, outerBorder, headerDivider, InpFiles(files));
+            // If not aligned call the method and exit
             Merger.Vertical(delimiter, separator, outerBorder, InpFiles(files));
 
             // Default Exit
             Environment.Exit(0);
         }
-        // Get all input files
         private static InpFile[] InpFiles(List<string> fileNames)
-        {
-            InpFile[] inpFiles = new InpFile[fileNames.Count()];
-            for (int index = 0; index < fileNames.Count(); index++)
-            {
-                inpFiles[index] = new InpFile(fileNames[index]);
-                if (deleteLastBlank)
-                {
-                    inpFiles[index].DeleteLastBlankSlice(delimiter);
-                }
+        { // Get all input files
+            InpFile[] inpFiles = new InpFile[fileNames.Count()]; // Get all files
+            for (int fileName = 0; fileName < fileNames.Count(); fileName++)
+            { // Loop all file names
+                inpFiles[fileName] = new InpFile(fileNames[fileName]); // Create file objects
+                if (deleteLastBlank) // If last blank lines not wanted
+                    inpFiles[fileName].DeleteLastBlankSlice(delimiter); // delete them
             }
             return inpFiles;
         }
         private static void ShowHelp(OptionSet options)
-        {
+        { // Show help and exit
             Console.WriteLine("Usage: sharpglue [OPTIONS] [INPUT FILES]\nOptions:");
             options.WriteOptionDescriptions(Console.Out);
             Console.WriteLine("\nDev Homepage : https://github.com/Elagoht/sharpglue\nBug Reports  : https://github.com/Elagoht/sharpglue/issues");
+            Environment.Exit(0);
         }
     }
 }
