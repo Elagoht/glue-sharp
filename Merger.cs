@@ -13,7 +13,7 @@ namespace Glue
             Console.Write(result);
             Environment.Exit(0);
         }
-        public static void HorizontalAligned(string delimiter, string separator, Alignment alignment, char filler, bool outerBorder, InpFile[] inpFiles)
+        public static void HorizontalAligned(string delimiter, string separator, Alignment alignment, char filler, bool outerBorder, string headerDivider, InpFile[] inpFiles)
         {
             string result = "";
             int[] widths = GroupInfo.ColumnSizes(delimiter, inpFiles);
@@ -43,6 +43,36 @@ namespace Glue
                         result += Aligner.CenterAlign("", widths[index], filler) + separator;
                     }
                 }
+                // Check if it is first line 
+                if (inpFile == inpFiles[0])
+                {
+                    // Check if header is available
+                    if (headerDivider != "")
+                    {
+                        // Create divider line array
+                        string[] dividerLine = new string[widths.Length];
+                        for (int index = 0; index < widths.Length; index++)
+                        {
+                            dividerLine[index] = string.Concat(Enumerable.Repeat(
+                                headerDivider != ""
+                                    ? (headerDivider)
+                                    : "-",
+                                index == widths.Length - 1
+                                    ? (outerBorder
+                                        ? widths[index]
+                                        : widths[index] + separator.Length)
+                                    : widths[index]
+                            )).Substring(0, widths[index]);
+                        }
+                        // Check the outer check because of adding two lines at once
+                        if (!outerBorder)
+                            result = result.Substring(0, result.Length - separator.Length);
+                        // Then add the divider
+                        result += '\n' + (outerBorder ? separator : ""); // Outer border
+                        result += (string.Join(separator, dividerLine)); // Add the line
+                        result += outerBorder ? separator : ""; // Outer border
+                    }
+                }
                 if (!outerBorder)
                     result = result.Substring(0, result.Length - separator.Length);
                 result += "\n";
@@ -70,7 +100,7 @@ namespace Glue
             Console.Write(result);
             Environment.Exit(0);
         }
-        public static void VerticalAligned(string delimiter, string separator, Alignment alignment, char filler, bool outerBorder, InpFile[] inpFiles)
+        public static void VerticalAligned(string delimiter, string separator, Alignment alignment, char filler, bool outerBorder, string headerDivider, InpFile[] inpFiles)
         {
             string result = "";
             int[] widths = GroupInfo.RowSizes(delimiter, inpFiles);
@@ -85,15 +115,21 @@ namespace Glue
                         switch (alignment)
                         {
                             case Alignment.Center:
-                                result += Aligner.CenterAlign(inpFiles[file].Items(delimiter)[line], widths[file], filler) + separator;
+                                result += Aligner.CenterAlign(inpFiles[file].Items(delimiter)[line], widths[file], filler);
                                 break;
                             case Alignment.Right:
-                                result += Aligner.RightAlign(inpFiles[file].Items(delimiter)[line], widths[file], filler) + separator;
+                                result += Aligner.RightAlign(inpFiles[file].Items(delimiter)[line], widths[file], filler);
                                 break;
                             default:
-                                result += Aligner.LeftAlign(inpFiles[file].Items(delimiter)[line], widths[file], filler) + separator;
+                                result += Aligner.LeftAlign(inpFiles[file].Items(delimiter)[line], widths[file], filler);
                                 break;
                         }
+                        if (headerDivider != "")
+                            result += file == 0
+                                ? headerDivider
+                                : separator;
+                        else
+                            result += separator;
                     }
                     else
                     {

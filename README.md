@@ -27,9 +27,16 @@ Options:
   -d, --delimiter=VALUE      String value that will split the file contents
   -s, --separator=VALUE      String value that will bind the new parts
   -f, --filler=VALUE         Determine what empty areas will be filled with
+  -H, --header-divider=VALUE Add a divider after first column/row, overwrites 
+                               alignment
   -t, --transpose            Swap columns and rows
-      --csv                  Csv with semicolon, same as -t -n -s ";"
-      --csv2                 Csv with comma, same as -t -n -s ","
+  -r, --remove-last-blank    Delete last blank lines to minimize the output
+  -b, --border               Add extra separators at the beginning and end of 
+                               each line
+      --csv                  Csv with semicolon, same as -r -t -n -s ";"
+      --csv2                 Csv with comma, same as -r -t -n -s ","
+  -m, --markdown             Create markdown table formatted output, same as -
+                               r -t -s " | " -b
 
 Dev Homepage : https://github.com/Elagoht/sharpglue
 Bug Reports  : https://github.com/Elagoht/sharpglue/issues
@@ -42,27 +49,50 @@ try this commands and check file contents to understand working logic.
 **Example:**
 
 ```sh
-$ sharpglue header.csv data.csv -f "_" -s " | " -d ";"
+$ sharpglue examples/header.csv examples/data.csv examples/data1.csv -s " & " -d ";" -r -H " values are "
 ```
 
 ```
-Full Name | Furkan Baytekin_________
-Job______ | Software Developer______
-Email____ | furkanbaytekin@gmail.com
-Languages | Python, JavaScript, C#__
+Full Name values are Furkan Baytekin          & Anonymus                   
+Job       values are Software Developer       & Hacker                     
+Email     values are furkanbaytekin@gmail.com & anonymus@protonmail.com    
+Language  values are Python, JavaScript, C    & C, Shell Script, PowerShell
 ```
 
 **Example:**
 
 ```sh
-$ sharpglue header.txt data.txt -t -f "." -a center -s '   '
+$ sharpglue examples/header.txt examples/data.txt examples/data1.txt -t -f "." -a center -s ' | '
 ```
 
 ```
-...Full Name...   .......Job........   .........Email..........   ......Languages.......
-Furkan Baytekin   Software Developer   furkanbaytekin@gmail.com   Python, JavaScript, C#
+...Full Name... | .......Job........ | .........Email.......... | .........Languages.........
+Furkan Baytekin | Software Developer | furkanbaytekin@gmail.com | ..Python, JavaScript, C#...
+...Anonymus.... | ......Hacker...... | anonymus@protonmail.com. | C, Shell Script, PowerShell
 ```
 
-## Under Development!
+**Example:**
 
-This project is not finished yet.
+```sh
+$ sharpglue examples/header.csv data.csv -m
+```
+
+```
+ | Full Name       | Job                | Email                    | Languages                   | 
+ | --------------- | ------------------ | ------------------------ | --------------------------- | 
+ | Furkan Baytekin | Software Developer | furkanbaytekin@gmail.com | Python, JavaScript, C#      | 
+ | Anonymus        | Hacker             | anonymus@protonmail.com  | C, Shell Script, PowerShell | 
+```
+
+**Example:**
+
+```sh
+$ sharpglue examples/header.txt examples/data.txt -H " --> "
+```
+
+```
+Full Name --> Furkan Baytekin         
+Job       --> Software Developer      
+Email     --> furkanbaytekin@gmail.com
+Languages --> Python, JavaScript, C#  
+```
