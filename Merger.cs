@@ -2,20 +2,25 @@ namespace Glue
 {
     public static class Merger
     {
-        public static void Horizontal(string delimiter, string separator, InpFile[] inpFiles)
+        public static void Horizontal(string delimiter, string separator, bool outerBorder, InpFile[] inpFiles)
         {
             string result = "";
-            foreach (InpFile inpFile in inpFiles) result += string.Join(separator, inpFile.Items(delimiter)) + '\n';
+            foreach (InpFile inpFile in inpFiles) result +=
+                (outerBorder ? separator : "") +
+                string.Join(separator, inpFile.Items(delimiter)) +
+                (outerBorder ? separator : "") +
+                '\n';
             Console.Write(result);
             Environment.Exit(0);
         }
-        public static void HorizontalAligned(string delimiter, string separator, Alignment alignment, char filler, InpFile[] inpFiles)
+        public static void HorizontalAligned(string delimiter, string separator, Alignment alignment, char filler, bool outerBorder, InpFile[] inpFiles)
         {
             string result = "";
             int[] widths = GroupInfo.ColumnSizes(delimiter, inpFiles);
             foreach (InpFile inpFile in inpFiles)
             {
                 string[] items = inpFile.Items(delimiter);
+                result += (outerBorder ? separator : "");
                 for (int index = 0; index < widths.Length; index++)
                 {
                     if (index < items.Length)
@@ -38,19 +43,21 @@ namespace Glue
                         result += Aligner.CenterAlign("", widths[index], filler) + separator;
                     }
                 }
-                result = result.Substring(0, result.Length - separator.Length);
+                if (!outerBorder)
+                    result = result.Substring(0, result.Length - separator.Length);
                 result += "\n";
             }
             Console.Write(result);
             Environment.Exit(0);
         }
-        public static void Vertical(string delimiter, string separator, InpFile[] inpFiles)
+        public static void Vertical(string delimiter, string separator, bool outerBorder, InpFile[] inpFiles)
         {
             string result = "";
             int[] widths = GroupInfo.RowSizes(delimiter, inpFiles);
             int totalLines = GroupInfo.MaxLineCount(delimiter, inpFiles);
             for (int line = 0; line < totalLines; line++)
             {
+                result += (outerBorder ? separator : "");
                 for (int file = 0; file < inpFiles.Count(); file++)
                 {
                     if (line < inpFiles[file].LineCount(delimiter))
@@ -58,17 +65,19 @@ namespace Glue
                 }
                 result += '\n';
             }
-            result = result.Substring(0, result.Length - separator.Length) + '\n';
+            if (!outerBorder)
+                result = result.Substring(0, result.Length - separator.Length) + '\n';
             Console.Write(result);
             Environment.Exit(0);
         }
-        public static void VerticalAligned(string delimiter, string separator, Alignment alignment, char filler, InpFile[] inpFiles)
+        public static void VerticalAligned(string delimiter, string separator, Alignment alignment, char filler, bool outerBorder, InpFile[] inpFiles)
         {
             string result = "";
             int[] widths = GroupInfo.RowSizes(delimiter, inpFiles);
             int totalLines = GroupInfo.MaxLineCount(delimiter, inpFiles);
             for (int line = 0; line < totalLines; line++)
             {
+                result += (outerBorder ? separator : "");
                 for (int file = 0; file < inpFiles.Count(); file++)
                 {
                     if (line < inpFiles[file].LineCount(delimiter))
@@ -91,6 +100,7 @@ namespace Glue
                         result += Aligner.CenterAlign("", widths[file], filler) + separator;
                     }
                 }
+                result += (outerBorder ? separator : "");
                 result = result.Substring(0, result.Length - separator.Length) + '\n';
             }
             Console.Write(result);

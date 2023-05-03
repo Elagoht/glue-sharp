@@ -11,6 +11,7 @@ namespace Glue
         private static bool align = true;
         private static bool transpose = false;
         private static bool deleteLastBlank = false;
+        private static bool outerBorder = false;
         private static bool help = false;
 
         private static void Main(string[] args)
@@ -40,7 +41,9 @@ Valid values :
                 { "d=|delimiter=", "String value that will split the file contents", (string value) => { delimiter = value; } },
                 { "s=|separator=", "String value that will bind the new parts", (string value) => { separator = value; } } ,
                 { "f=|filler=", "Determine what empty areas will be filled with", (string value) => { filler = char.Parse(value.Substring(0,1)); } },
+                { "t|transpose", "Swap columns and rows", (string value) => {transpose = value == "transpose" || value == "t"; } },
                 { "l|delete-last-blank", "Delete last blank lines to minimize the output", (string value) => {deleteLastBlank = value == "delete-last-blank" || value == "l"; } },
+                { "b|border", "Add extra separators at the beginning and end of each line", (string value) => {outerBorder = value == "border" || value == "b"; } },
                 { "csv", "Csv with semicolon, same as -t -n -s \";\"", (string value) => {
                     if (transpose = value == "csv") {
                         separator = ";";
@@ -105,15 +108,15 @@ Valid values :
             {
                 if (align)
                 {
-                    Merger.HorizontalAligned(delimiter, separator, alignment, filler, InpFiles(files));
+                    Merger.HorizontalAligned(delimiter, separator, alignment, filler, outerBorder, InpFiles(files));
                 }
-                Merger.Horizontal(delimiter, separator, InpFiles(files));
+                Merger.Horizontal(delimiter, separator, outerBorder, InpFiles(files));
             }
             if (align)
             {
-                Merger.VerticalAligned(delimiter, separator, alignment, filler, InpFiles(files));
+                Merger.VerticalAligned(delimiter, separator, alignment, filler, outerBorder, InpFiles(files));
             }
-            Merger.Vertical(delimiter, separator, InpFiles(files));
+            Merger.Vertical(delimiter, separator, outerBorder, InpFiles(files));
 
             // Default Exit
             Environment.Exit(0);

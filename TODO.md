@@ -1,6 +1,6 @@
 # TODO
 
-- [ ] Delete last blank line option
-- [ ] Add outer border
+- [X] Delete last blank line option
+- [X] Add outer border
 - [ ] Add first field border
 - [ ] Markdown table option
