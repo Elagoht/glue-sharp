@@ -28,7 +28,7 @@ namespace Glue
         public void DeleteLastBlankSlice(string delimiter)
         { // If the last part is delimiter's itself delete it
             if (this.Content.Substring(this.Content.Length - delimiter.Length, delimiter.Length) == delimiter)
-                this.Content = this.Content.Substring(0, this.Content.Length - delimiter.Length * 2);
+                this.Content = this.Content.Substring(0, this.Content.Length - delimiter.Length);
         }
         public string[] Items(string delimiter)
         { // Split with delimiter
